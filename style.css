@@ -13,6 +13,7 @@ body {
     height: 100%;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .calculator {
@@ -30,18 +31,20 @@ body {
 
 .output-screen {
     display:flex;
-    align-items: center;
-    justify-content: flex-end;
+    align-items: flex-end;
+    /* justify-content: flex-end; */
     padding: 10px;
     background-color: white;
     border-radius: 10px;
     /* border: solid 2px rgb(95, 134, 218); */
     width: 90%;
     height: 15%;
+    flex-direction: column;
 }
 
 .output {
     font-size: 75px;
+    text-align: end;
 }
 
 .buttons {
@@ -70,4 +73,9 @@ body {
 
 .extra_function {
     background-color: darkcyan;
+}
+
+[id='message'] {
+    padding: 10px;
+    font-size: 20px;
 }

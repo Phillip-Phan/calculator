@@ -1,4 +1,11 @@
 const buttons = document.getElementById('buttons');
+const output = document.getElementById('output');
+const number = buttons.querySelectorAll('button');
+const addButton = document.getElementById('+');
+const subtractButton = document.getElementById('-');
+const multiplyButton = document.getElementById('*');
+const divideButton = document.getElementById('/');
+const message = document.getElementById('message');
 
 let currentValue = 0;
 let input = 'default';
@@ -7,11 +14,9 @@ let operator = 'none';
 let firstNumber = '';
 let secondNumber = '';
 let begin = true;
-const output = document.getElementById('output');
 
 output.textContent = 0;
 
-const number = buttons.querySelectorAll('button');
 
 number.forEach( number_button => {    
     if (Number(number_button.id) || number_button.id == '0') {
@@ -28,6 +33,21 @@ function appendNumber(number) {
     } else {
         output.textContent += number;
     }
+    checkLength();
+}
+
+function checkLength() {
+    if (output.textContent.length >= 12) {
+        if (Number.isInteger(Number(output.textContent))) {
+            output.textContent = Number(output.textContent).toExponential(2);
+        } else {
+            output.textContent = output.textContent.slice(0,12);
+            message.textContent = "rounded number to fit the space.";
+        }
+    }
+    else {
+        message.textContent = "";
+    }
 }
 
 //addd event listener to clear button
@@ -38,6 +58,17 @@ document.getElementById('clear').addEventListener( 'click', () => {
     console.log(`${currentValue}, ${input}`);
 });
 
+document.getElementById('C').addEventListener( 'click', () => {
+    output.textContent = 0;
+    begin = true;
+    console.log(`${output.textContent}`);
+});
+
+document.getElementById('%').addEventListener( 'click', () => {
+    output.textContent = output.textContent / 100;
+    console.log(`${output.textContent}`);
+});
+
 document.getElementById('-').addEventListener( 'click', () => {
     if (operator != 'none') checkIfCanOperate();
     operator = '-';
@@ -45,6 +76,12 @@ document.getElementById('-').addEventListener( 'click', () => {
     begin = true;
 });
 
+document.getElementById('.').addEventListener( 'click', () => {
+    if (!output.textContent.includes('.')) {
+        output.textContent += '.';
+    }
+    begin = false;
+});
 
 document.getElementById('/').addEventListener( 'click', () => {
     if (operator != 'none') checkIfCanOperate();
@@ -83,26 +120,42 @@ document.getElementById('=').addEventListener( 'click', () => {
         case '+':
             currentValue = add(firstNumber, secondNumber);
             operator = 'none';
+            begin = true;
+            output.innerHTML = currentValue;
+            checkLength();
             break;
         case '-':
             currentValue = subtract(firstNumber, secondNumber);
             operator = 'none';
+            begin = true;
+            output.innerHTML = currentValue;
+            checkLength();
             break;
 
         case '/':
             currentValue = divide(firstNumber, secondNumber);
             operator = 'none';
+            begin = true;
+            output.innerHTML = currentValue;
+            checkLength();
             break;
 
         case '*':
             currentValue = multiply(firstNumber, secondNumber);
             operator = 'none';
+            begin = true;
+            output.innerHTML = currentValue;
+            checkLength();
             break;
-
+        default:
+            message.textContent = "should press / * - + before =";
+            break
     }
-
-    output.innerHTML = currentValue;
 });
+
+function roundDecimal(number) {
+    return Math.round(number*1000)/1000;
+}
 
 function display() {
     if (input === 'default') 
